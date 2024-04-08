@@ -1,10 +1,3 @@
-### Wikipedia Search App with Entity Recognation and Part of Speect Annotation
-
-![alt text](Capture1.PNG)
-
-![alt text](Capture2.PNG)
-
-
 
 # Instructions to Edit and Run the App Locally
 
@@ -53,9 +46,26 @@ To run the app locally, follow these steps:
 7. Run the following command in the terminal to start the app:
 
     ```
+
+    
     streamlit run app.py
     ```
 
 
 8. You can now interact with the app locally.
 
+
+##Output 
+
+Annotation with hyperlinks redirecting to Google 
+
+1. Parts of Sppexh (POS)
+<img width="1282" alt="Screenshot 2024-04-08 at 8 47 25 PM" src="https://github.com/meetarthi/NER_project/assets/112666126/fb1fd2e5-8483-4b1e-be1d-d1a3d5a68097">
+
+2. Entity recognition
+   <img width="858" alt="Screenshot 2024-04-08 at 8 50 18 PM" src="https://github.com/meetarthi/NER_project/assets/112666126/e8bf3eb0-318e-43e4-86b9-38edf04261b5">
+
+   
+
+
+   
