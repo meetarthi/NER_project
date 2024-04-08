@@ -57,7 +57,7 @@ To run the app locally, follow these steps:
 
 # Output (Annotation with hyperlinks redirecting to Google)
 
-## 1. Parts of Sppexh (POS)
+## 1. Parts of Speech (POS)
 <img width="1282" alt="Screenshot 2024-04-08 at 8 47 25 PM" src="https://github.com/meetarthi/NER_project/assets/112666126/fb1fd2e5-8483-4b1e-be1d-d1a3d5a68097">
 
 ## 2. Entity recognition
