@@ -30,7 +30,6 @@ pos_colors = {
 
 def visualize_entities(text, entity_types, ner_words):
     sentence = text
-    # for words in ner_words:
     doc = nlp(sentence)
 
     output = '' 
