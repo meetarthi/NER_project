@@ -11,7 +11,7 @@ from PIL import Image
 
 
 NLP = spacy.load("en_core_web_sm")
-openai.api_key = 'OPEN_AI_KEY'
+openai.api_key = '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'
 
 POS_COLORS = {
         "ADJ": "#FF5733",  # Adjective
@@ -34,17 +34,26 @@ POS_COLORS = {
         "X": "#708090"  # Other
     }
 
-def search(search_text):
+def chat_with_gpt_search(prompt):
     try:
-        if search_text:
-            results = wikipedia.summary(search_text, sentences = 4)
-            doc = NLP(results) 
-            return doc
-    except wikipedia.exceptions.DisambiguationError:
-        return None        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Give an explanation in form of summary"},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        return response.choices[0].message['content']
+    except Exception as e:
+        print("An error occurred:", str(e))
+        return None
 
+def search(search_text):
+    results = chat_with_gpt_search(search_text)
+    doc = NLP(results)
+    return doc
 
-def chat_with_gpt(prompt):
+def chat_with_gpt_entity(prompt):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
@@ -63,18 +72,21 @@ def visualize_entities(text):
         doc = NLP(text)
         entity_labels = {ent.label_ for ent in doc.ents}
         ner_words = [ent.text for ent in doc.ents]
-        sidebar_keys = [f"button_{value}" for value in ner_words]
         entity_types = st.multiselect("Select Entity Type", ("ALL",)+ tuple(entity_labels), ("ALL"))
         output = '' 
         if not entity_types or entity_types == ["ALL"]:
             output = displacy.render([doc], style="ent")
         else:
             output = displacy.render([doc], style="ent", options={"ents": entity_types})
-        for word in ner_words:    
+       
+        i = 0
+        for word in ner_words:  
             sideb = st.sidebar
-            if sideb.button(word,key=sidebar_keys):
-                result = chat_with_gpt(word)
+            i += 1
+            if sideb.button(word, key = i) :
+                result = chat_with_gpt_entity(word)
                 st.sidebar.markdown(result)
+
         st.write(output, unsafe_allow_html=True)
 
 def pos_tagging(text):
@@ -116,11 +128,11 @@ def extract_text_from_image(uploaded_file):
     text = pytesseract.image_to_string(image)
     return textwrap.fill(text, 100)
 
+
 def main():
     st.title("Innovative Annotation Application")
     elements = ["Entity Recognition", "Part Of Speech", "Image To Text"]
-    multi_keys =list(f"button_{element}" for element in elements)
-    selected = option_menu(None, elements, key=multi_keys, menu_icon="cast", default_index=0, orientation="horizontal")
+    selected = option_menu(None, elements, menu_icon="cast", default_index=0, orientation="horizontal")
     if selected == "Entity Recognition":
         results = search(st.text_input("Enter text:"))
         visualize_entities(results)
@@ -136,6 +148,7 @@ def main():
                 visualize_entities(results)
             elif option == "Part of Speech Tagging":
                 pos_tagging(results)
+    
 
 
 
