@@ -11,7 +11,7 @@ from PIL import Image
 
 
 NLP = spacy.load("en_core_web_sm")
-openai.api_key = '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'
+openai.api_key = 'OPEN_AI_KEY'
 
 POS_COLORS = {
         "ADJ": "#FF5733",  # Adjective
