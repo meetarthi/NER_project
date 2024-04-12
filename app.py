@@ -11,7 +11,7 @@ from PIL import Image
 
 
 NLP = spacy.load("en_core_web_sm")
-openai.api_key = 'OPEN_AI_API'
+openai.api_key = 'OPEN_AI_KEY'
 
 POS_COLORS = {
         "ADJ": "#FF5733",  # Adjective
@@ -79,32 +79,18 @@ def visualize_entities(text):
         else:
             output = displacy.render([doc], style="ent", options={"ents": entity_types})
         st.write(output, unsafe_allow_html=True)
-        # return ner_words
-
-# def results_sidebar(text):
-#     doc = NLP(text)
-#     ner_words = [ent.text for ent in doc.ents]
-#     i = 0
-#     for word in ner_words:
-#         sideb = st.sidebar
-#         i += 1
-#         if sideb.button(word, key = i):
-#             result = chat_with_gpt_entity(word)
-#             st.sidebar.markdown(result)
+        return ner_words
 
 def results_sidebar(text):
     doc = NLP(text)
-    entity_meaning = {}
     ner_words = [ent.text for ent in doc.ents]
-    for words in ner_words:
-        result = chat_with_gpt_entity(words)
-        entity_meaning[words]=result
     i = 0
-    for entity, meaning in entity_meaning.items():
+    for word in ner_words:
         sideb = st.sidebar
         i += 1
-        if sideb.button(entity, key = i):
-            st.sidebar.markdown(meaning)
+        if sideb.button(word, key = i):
+            result = chat_with_gpt_entity(word)
+            st.sidebar.markdown(result)
 
 def pos_tagging(text):
     # Load the English language model
@@ -167,105 +153,5 @@ def main():
             elif option == "Part of Speech Tagging":
                 pos_tagging(results)
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def main():
-#     col1, col2 = st.columns( [0.8, 0.2])
-#     with col1:               # To display the header text using css style
-#         st.markdown(""" <style> .font {font-size:35px ; font-family: 'Cooper Black'; color: #FF9633;}</style> """, unsafe_allow_html=True)
-#         st.markdown('<p class="font">Upload your photo here...</p>', unsafe_allow_html=True)
-        
-#     with col2:               # To display brand logo
-#         st.write("logo,  width=150")
-#     #Add file uploader to allow users to upload photos
-    
-#     uploaded_file = st.file_uploader("", type=['jpg','png','jpeg'])    
-#     if uploaded_file is not None:
-#         image = Image.open(uploaded_file)
-        
-#     col1, col2 = st.columns( [0.5, 0.5])
-#     with col1:
-#         st.markdown('<p style="text-align: center;">Before</p>',unsafe_allow_html=True)
-#         st.image(image,width=300)  
-
-#     with col2:
-#         st.markdown('<p style="text-align: center;">After</p>',unsafe_allow_html=True)
-
-#         st.image(image,width=300)  
-        
 if __name__ == '__main__':
     main()        
