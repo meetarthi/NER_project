@@ -11,7 +11,7 @@ from PIL import Image
 
 
 NLP = spacy.load("en_core_web_sm")
-openai.api_key = 'OPEN_AI_KEY'
+openai.api_key = 'OPEN_API_KEY'
 
 POS_COLORS = {
         "ADJ": "#FF5733",  # Adjective
@@ -58,7 +58,7 @@ def chat_with_gpt_entity(prompt):
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Give a simplified explanation of the input that can be understood by kids"},
+                {"role": "system", "content": "Give a simplified explanation of the input that contains NER entity."},
                 {"role": "user", "content": prompt}
             ]
         )
@@ -78,19 +78,41 @@ def visualize_entities(text):
             output = displacy.render([doc], style="ent")
         else:
             output = displacy.render([doc], style="ent", options={"ents": entity_types})
-        st.write(output, unsafe_allow_html=True)
-        return ner_words
 
-def results_sidebar(text):
-    doc = NLP(text)
-    ner_words = [ent.text for ent in doc.ents]
-    i = 0
-    for word in ner_words:
-        sideb = st.sidebar
-        i += 1
-        if sideb.button(word, key = i):
-            result = chat_with_gpt_entity(word)
-            st.sidebar.markdown(result)
+        i = 0
+        for word in ner_words:
+            sideb = st.sidebar
+            i += 1
+            if sideb.button(word, key = i):
+                result = chat_with_gpt_entity(word)
+                st.sidebar.markdown(result)
+        st.write(output, unsafe_allow_html=True)
+
+
+# def results_sidebar(text):
+#     doc = NLP(text)
+#     ner_words = [ent.text for ent in doc.ents]
+#     i = 0
+#     for word in ner_words:
+#         sideb = st.sidebar
+#         i += 1
+#         if sideb.button(word, key = i):
+#             result = chat_with_gpt_entity(word)
+#             st.sidebar.markdown(result)
+
+# def results_sidebar(text):
+#     doc = NLP(text)
+#     entity_meaning = {}
+#     ner_words = [ent.text for ent in doc.ents]
+#     for words in ner_words:
+#         result = chat_with_gpt_entity(words)
+#         entity_meaning[words]=result
+#     i = 0
+#     for entity, meaning in entity_meaning.items():
+#         sideb = st.sidebar
+#         i += 1
+#         if sideb.button(entity, key = i):
+#             st.sidebar.markdown(meaning)
 
 def pos_tagging(text):
     # Load the English language model
@@ -139,7 +161,7 @@ def main():
     if selected == "Entity Recognition":
         results = search(st.text_input("Enter text:"))
         visualize_entities(results)
-        results_sidebar(results)
+        # results_sidebar(results)
     elif selected == "Part Of Speech":
         results = search(st.text_input("Enter text:"))
         pos_tagging(results)
