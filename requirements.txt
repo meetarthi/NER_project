@@ -5,4 +5,3 @@ Pillow
 pytesseract
 wikipedia
 openai==0.28
-en-core-web-sm==3.5.0
